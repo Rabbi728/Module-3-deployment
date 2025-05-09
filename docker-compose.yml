@@ -1,0 +1,25 @@
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    depends_on:
+      - express-app
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - assignment-network
+
+  express-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+    networks:
+      - assignment-network
+    restart: unless-stopped
+
+networks:
+  assignment-network:
+    driver: bridge
